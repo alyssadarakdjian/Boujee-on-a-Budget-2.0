@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2016",
-<<<<<<< HEAD
     "module": "esnext",
-=======
-    "module": "commonjs",
->>>>>>> origin/main
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -18,38 +14,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-<<<<<<< HEAD
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./*"]
-=======
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "baseUrl": ".",
-    "paths": {
       "@/*": ["./app/*"]
->>>>>>> origin/main
     }
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-<<<<<<< HEAD
     "**/*.tsx",
     "app/**/*"
   ],
   "exclude": ["node_modules"]
 }
 
-=======
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
->>>>>>> origin/main
