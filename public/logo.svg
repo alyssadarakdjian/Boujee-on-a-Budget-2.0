@@ -52,7 +52,11 @@
     <!-- Centered All-Caps Text - Smaller & Closer -->
     <text x="200" y="218" 
           font-family="Poppins, sans-serif" 
+<<<<<<< HEAD
           font-size="14" 
+=======
+          font-size="18" 
+>>>>>>> origin/main
           fill="#000000" 
           text-anchor="middle" 
           font-weight="bold"
