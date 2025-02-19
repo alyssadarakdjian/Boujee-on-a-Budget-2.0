@@ -1,9 +1,10 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
 return (
     <section className="bg-white">
     <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
+        {/* Left Side - Background Image */}
         <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
         <img
             alt="Background"
@@ -15,23 +16,24 @@ return (
             Welcome to Boujee on a Budget
             </h2>
             <p className="mt-4 leading-relaxed text-white/90">
-            Sign in to continue.
+            Sign up to continue.
             </p>
         </div>
         </section>
 
+        {/* Right Side - Sign-Up Form */}
         <main className="flex flex-col items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
-        <div className="max-w-xl lg:max-w-3xl text-center">
+        <div className="max-w-md lg:max-w-3xl text-center">
             <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-            Sign in to Boujee on a Budget
+            Sign up for Boujee on a Budget
             </h1>
             <p className="mt-2 text-gray-600">
-            Access your account to start saving money!
+            Create an account to start saving money!
             </p>
 
-            {/* Clerk SignIn Component */}
+            {/* Clerk SignUp Component */}
             <div className="mt-8 w-full flex justify-center">
-            <SignIn />
+            <SignUp />
             </div>
         </div>
         </main>
