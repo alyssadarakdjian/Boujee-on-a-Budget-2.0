@@ -33,7 +33,7 @@ function Header() {
           </Button>
         </div> 
       )}
-    </div> // ✅ This div closes the header container properly
+    </div> 
   );
 }
 
