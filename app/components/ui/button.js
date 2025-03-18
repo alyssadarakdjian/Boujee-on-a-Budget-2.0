@@ -1,3 +1,5 @@
+"use client"; // ✅ Ensures this component runs on the client
+
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import { useRouter } from "next/navigation"; // Import Next.js Router
@@ -29,7 +31,7 @@ const buttonVariants = cva(
   }
 );
 
-// ✅ Updated Button component (Keeping Local Changes)
+// ✅ Updated Button component
 const Button = React.forwardRef(({ className, variant, size, href, onClick, ...props }, ref) => {
   const router = useRouter();
 

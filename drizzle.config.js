@@ -1,8 +1,10 @@
-import { defineConfig } from "drizzle-kit";
-export default defineConfig({
-  dialect: 'postgresql',
-  schema: "./utils/schema.jsx",
+import "dotenv/config";
+
+export default {
+  schema: "@/lib/schema.js",
+  out: "./drizzle",
+  dialect: "postgresql",
   dbCredentials: {
-    connectionString: process.env.NEXT_PUBLIC_DATABASE_URL,
-  }
-});
+    connectionString: process.env.DATABASE_URL,
+  },
+};
