@@ -4,12 +4,14 @@ import { db } from "@/lib/dbConfig";
 import { Budgets } from "@/lib/schema";
 import { useUser } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import DashboardHeader from "./_components/DashboardHeader";
 import SideNav from "./_components/SideNav";
 
 export default function DashboardLayout({ children }) {
   const { user } = useUser();
+  const router=useRouter();
 
   useEffect(() => {
     if (user) {
@@ -27,6 +29,9 @@ export default function DashboardLayout({ children }) {
         .where(eq(Budgets.createdBy, user.primaryEmailAddress.emailAddress));
 
       console.log(result);
+      {
+        router.replace('/dashboard/budgets')
+      }
     } catch (error) {
       console.error("Error fetching budgets:", error);
     }

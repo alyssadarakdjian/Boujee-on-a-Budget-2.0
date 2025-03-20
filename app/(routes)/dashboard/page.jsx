@@ -25,8 +25,8 @@ export default function Dashboard() {
 
   return (
     <div className="p-5">
-      <h1 className="text-2xl font-bold">Welcome to Boujee on a Budget</h1>
-      <p className="text-gray-600 mt-2">
+      <h1 className="text-2xl text-pink-500 font-bold">Welcome to Boujee on a Budget</h1>
+      <p className="text-pink-300 mt-2">
         Manage your budgets, track expenses, and upgrade your experience.
       </p>
     </div>
