@@ -13,12 +13,10 @@ function BudgetItem({ budget }) {
           </div>
           <h3 className="text-2xl font-bold text-pink-500">${budget.amount}</h3>
         </div>
-
         <div className="flex justify-between text-gray-400 text-sm mb-3">
           <span>${budget.totalSpend || 0} Spent</span>
           <span>${budget.amount - (budget.totalSpend || 0)} Remaining</span>
         </div>
-
         <div className="bg-gray-200 h-2 rounded-full">
           <div
             className="bg-pink-500 h-2 rounded-full"
@@ -32,3 +30,4 @@ function BudgetItem({ budget }) {
 }
 
 export default BudgetItem;
+
