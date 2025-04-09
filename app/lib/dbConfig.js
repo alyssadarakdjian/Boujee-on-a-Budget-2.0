@@ -1,6 +1,7 @@
-import * as schema from "@/lib/schema.js";
+import * as schema from "@/lib/schema.ts";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
+
 
 if (!process.env.DATABASE_URL) {
 throw new Error("No database connection string found. Check your .env.local file.");

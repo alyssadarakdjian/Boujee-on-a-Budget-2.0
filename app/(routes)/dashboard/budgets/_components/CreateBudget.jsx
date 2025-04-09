@@ -53,7 +53,7 @@ function CreateBudget() {
           <div
             className="bg-pink-100 p-10 rounded-md
             items-center flex flex-col border-2 border-dashed border-pink-200
-            cursor-pointer hover:shadow-md"
+            cursor-pointer hover:shadow-md h-[190px]"
           >
             <h2 className="text-3xl font-extrabold text-pink-400 p-2">+</h2>
             <h2 className="text-pink-400 font-bold">Create New Budget</h2>

@@ -17,16 +17,22 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider
       appearance={{ layout: { showOptionalFields: false } }}
-      afterSignInUrl="/dashboard" // Redirect after signing in
-      afterSignUpUrl="/dashboard" // Redirect after signing up
+      afterSignInUrl="/dashboard"
+      afterSignUpUrl="/dashboard"
     >
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <Toaster/>
+          {/* ✅ Toast notifications */}
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            expand
+            gap={16}
+          />
           {children}
         </body>
       </html>
     </ClerkProvider>
   );
 }
-
