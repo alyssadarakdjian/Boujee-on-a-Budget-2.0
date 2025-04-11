@@ -1,25 +1,43 @@
-"use server";
-import { db } from "@/lib/dbConfig";
-import { Budgets } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+'use server';
 
-export async function POST(req) {
-    try {
-        const { email } = await req.json();
-        console.log("Fetching budgets for email:", email);
+import { db } from "@/lib/dbConfig"; // Your database configuration
+import { Budgets } from "@/lib/schema"; // Your schema
+import { eq } from "drizzle-orm"; // Drizzle ORM equality operator
 
-        const result = await db
-            .select()
-            .from(Budgets)
-            .where(eq(Budgets.createdBy, email));
+// Handling GET requests
+export async function GET(req) {
+  try {
+    // Extract email from query parameters (GET request)
+    const url = new URL(req.url);
+    const email = url.searchParams.get("email");  // Get the email from query params
 
-        console.log("Fetched budgets:", result);
-        return Response.json(result);
-    } catch (error) {
-        console.error("🔥 API ERROR:", error);
-        return new Response(
-            JSON.stringify({ error: "Internal Server Error", details: error.message }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
-        );
+    if (!email) {
+      return new Response(
+        JSON.stringify({ error: "Email parameter is missing" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
+
+    console.log("Fetching budgets for email:", email);
+
+    // Fetch data from the database for the provided email
+    const result = await db
+      .select()
+      .from(Budgets)
+      .where(eq(Budgets.createdBy, email));
+
+    console.log("Fetched budgets:", result);
+
+    // Return the result as JSON
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("🔥 API ERROR:", error);
+    return new Response(
+      JSON.stringify({ error: "Internal Server Error", details: error.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
 }

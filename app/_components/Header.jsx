@@ -1,4 +1,4 @@
-"use client"; // Ensures client-side rendering for authentication check
+"use client"; // Ensures client-side rendering for authentication check 
 
 import { Button } from "@/components/ui/button"; // Ensure correct import path
 import { useAuth, UserButton } from "@clerk/nextjs";
@@ -13,9 +13,18 @@ function Header() {
       {/* Logo */}
       <img src="./logo.svg" alt="logo" width="200" />
 
-      {/* If user is signed in, show profile button; otherwise, show Sign In and Sign Up buttons */}
+      {/* If user is signed in, show profile button and dashboard button */}
       {isSignedIn ? (
-        <UserButton />
+        <div className="flex gap-4">
+          <Button
+            onClick={() => router.push("/dashboard")} // Route to the dashboard page
+            className="bg-pink-500 text-white hover:bg-white hover:text-pink-500 border border-pink-500 transition"
+          >
+            Go to Dashboard
+          </Button>
+
+          <UserButton /> {/* Clerk's User Button */}
+        </div>
       ) : (
         <div className="flex gap-4"> 
           <Button

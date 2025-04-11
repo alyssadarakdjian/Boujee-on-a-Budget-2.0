@@ -4,31 +4,53 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/dbConfig';
 import { Expenses } from '@/lib/schema';
+import { useUser } from '@clerk/nextjs'; // Import useUser from Clerk
 import { eq, sql } from 'drizzle-orm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-function AddExpense({ budgetId, user, refreshData }) {
+function AddExpense({ budgetId, refreshData }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
 
+  // Use Clerk's useUser hook to get the current user
+  const { user, isSignedIn } = useUser();
+
+  useEffect(() => {
+    // Check if the user is signed in
+    if (!isSignedIn) {
+      toast.error('Please log in to add an expense.');
+    }
+  }, [isSignedIn]);
+
   const addNewExpense = async () => {
+    // Ensure user.email is available before attempting to insert
+    if (!user?.primaryEmailAddress?.emailAddress) {
+      toast.error('User email is missing. Please log in.');
+      console.log('User data is missing. Make sure the user is logged in and email is available.');
+      return;  // Exit function if the email is missing
+    }
+
     try {
-      // Insert new expense
+      // Log user email to check if it is correctly populated
+      console.log('Inserting expense with user email:', user.primaryEmailAddress.emailAddress);
+
+      // Insert new expense into database
       const result = await db
         .insert(Expenses)
         .values({
           name,
           amount: Number(amount),
           budgetId,
-          createdBy: user?.primaryEmailAddress?.emailAddress,
+          createdBy: user.primaryEmailAddress.emailAddress, // This should be valid
         })
         .returning({ insertedId: Expenses.id });
 
       if (result) {
         toast.success('New Expense Added!');
-        refreshData();
+        refreshData(); // Refresh the data after adding the new expense
 
+        // Reset form fields
         setName('');
         setAmount('');
 
@@ -54,8 +76,8 @@ function AddExpense({ budgetId, user, refreshData }) {
         }, 600); // Small delay to prevent UI overlap
       }
     } catch (error) {
-      console.error(error);
-      toast.error('❌ Failed to add expense.');
+      console.error('Error while adding expense:', error);
+      toast.error('Failed to add expense.');
     }
   };
 
@@ -86,7 +108,7 @@ function AddExpense({ budgetId, user, refreshData }) {
 
       <Button
         onClick={addNewExpense}
-        disabled={!(name && amount)}
+        disabled={!(name && amount)} // Disable button if name or amount is missing
         className="mt-4 w-full bg-pink-500 hover:bg-pink-600 text-white"
       >
         Add New Expense
