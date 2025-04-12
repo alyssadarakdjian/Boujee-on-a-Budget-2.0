@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
 
     // Step 2: Ensure user is available and logged in
     if (!user) {
-      console.error("User is not authenticated");
+      router.push('/'); // Redirect to home page if the user is not signed in
       return;
     }
 
@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }) {
     } else {
       console.error("User email is missing!");
     }
-    
+
     setLoading(false); // Set loading to false once the user is ready
   }, [user, isLoaded, router]);
 
@@ -57,6 +57,16 @@ export default function DashboardLayout({ children }) {
       console.error("Error fetching budgets:", error);
     }
   };
+
+  // If the user is signed out while on the dashboard, redirect them to the home page
+  useEffect(() => {
+    if (!isLoaded) return; // Wait for Clerk to finish loading
+    if (!user) {
+      // Log the error and redirect to the home page
+      router.push('/'); // Redirect to home if signed out
+      return;
+    }
+  }, [user, isLoaded, router]);
 
   if (loading) {
     return <p className="text-center text-lg mt-10">Loading...</p>; // Display a loading message while fetching data

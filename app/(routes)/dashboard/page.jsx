@@ -1,4 +1,4 @@
-'use client'; // Ensure this is at the top of your file
+"use client"; // Ensures client-side rendering for authentication check
 
 import { db } from "@/lib/dbConfig";
 import { useUser } from "@clerk/nextjs";
@@ -18,16 +18,20 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isLoaded) return; // Wait until Clerk is fully loaded
+
+    // If user is not signed in, redirect them to the sign-in page
     if (!isSignedIn) {
       router.replace("/sign-in"); // Redirect unauthorized users to Sign In
-    } else {
-      // Log the user object to check if email is available
-      console.log('User Object:', user);
-      if (user) {
-        fetchDashboardData();
-      }
-      setLoading(false);
+      return;
     }
+
+    // Log the user object to check if email is available
+    console.log('User Object:', user);
+    if (user) {
+      fetchDashboardData();
+    }
+
+    setLoading(false);
   }, [isSignedIn, isLoaded, router, user]);
 
   const fetchDashboardData = async () => {
@@ -76,7 +80,7 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return <p className="text-center text-lg mt-10">Redirecting...</p>;
+    return <p className="text-center text-lg mt-10">Loading...</p>;
   }
 
   return (
@@ -103,7 +107,7 @@ export default function Dashboard() {
           <div className="flex items-center">
             <DollarSign className="text-green-500 w-8 h-8 mr-4" />
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">Total Spend</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Total Spent</h3>
               <p className="text-xl font-bold text-pink-500">
                 {totalSpent > 0 ? `$${totalSpent}` : "No Spending Data"}
               </p>
@@ -116,7 +120,7 @@ export default function Dashboard() {
           <div className="flex items-center">
             <FileText className="text-purple-500 w-8 h-8 mr-4" />
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">No. Of Budgets</h3>
+              <h3 className="text-lg font-semibold text-gray-800"> # Of Budgets</h3>
               <p className="text-xl font-bold text-pink-500">
                 {totalBudgets > 0 ? totalBudgets : "No Budgets"}
               </p>
