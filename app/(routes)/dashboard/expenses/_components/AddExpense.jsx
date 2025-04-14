@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/dbConfig';
 import { Expenses } from '@/lib/schema';
-import { useUser } from '@clerk/nextjs'; // Import useUser from Clerk
+import { useUser } from '@clerk/nextjs';
 import { eq, sql } from 'drizzle-orm';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -12,49 +12,45 @@ import { toast } from 'sonner';
 function AddExpense({ budgetId, refreshData }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
-
-  // Use Clerk's useUser hook to get the current user
   const { user, isSignedIn } = useUser();
 
   useEffect(() => {
-    // Check if the user is signed in
     if (!isSignedIn) {
       toast.error('Please log in to add an expense.');
     }
   }, [isSignedIn]);
 
   const addNewExpense = async () => {
-    // Ensure user.email is available before attempting to insert
     if (!user?.primaryEmailAddress?.emailAddress) {
       toast.error('User email is missing. Please log in.');
-      console.log('User data is missing. Make sure the user is logged in and email is available.');
-      return;  // Exit function if the email is missing
+      return;
+    }
+
+    const numericAmount = Number(amount);
+
+    // ✅ Validate that amount is not negative
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      toast.error('Amount cannot be negative.');
+      return;
     }
 
     try {
-      // Log user email to check if it is correctly populated
-      console.log('Inserting expense with user email:', user.primaryEmailAddress.emailAddress);
-
-      // Insert new expense into database
       const result = await db
         .insert(Expenses)
         .values({
           name,
-          amount: Number(amount),
+          amount: numericAmount,
           budgetId,
-          createdBy: user.primaryEmailAddress.emailAddress, // This should be valid
+          createdBy: user.primaryEmailAddress.emailAddress,
         })
         .returning({ insertedId: Expenses.id });
 
       if (result) {
         toast.success('New Expense Added!');
-        refreshData(); // Refresh the data after adding the new expense
-
-        // Reset form fields
+        refreshData();
         setName('');
         setAmount('');
 
-        // Check if the total spent exceeds the budget after the new expense is added
         setTimeout(async () => {
           const updatedBudget = await db.query.Budgets.findFirst({
             where: (b, { eq }) => eq(b.id, budgetId),
@@ -65,7 +61,6 @@ function AddExpense({ budgetId, refreshData }) {
             .from(Expenses)
             .where(eq(Expenses.budgetId, budgetId));
 
-          // Compare total spent to budget amount and display a warning if exceeded
           if (
             totalSpent[0]?.total &&
             updatedBudget?.amount &&
@@ -73,7 +68,7 @@ function AddExpense({ budgetId, refreshData }) {
           ) {
             toast.warning('You have exceeded your budget!');
           }
-        }, 600); // Small delay to prevent UI overlap
+        }, 600);
       }
     } catch (error) {
       console.error('Error while adding expense:', error);
@@ -108,7 +103,7 @@ function AddExpense({ budgetId, refreshData }) {
 
       <Button
         onClick={addNewExpense}
-        disabled={!(name && amount)} // Disable button if name or amount is missing
+        disabled={!(name && amount)}
         className="mt-4 w-full bg-pink-500 hover:bg-pink-600 text-white"
       >
         Add New Expense
